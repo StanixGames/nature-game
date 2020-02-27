@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Renderer from './Renderer';
-import Living from './entities/Living';
+import Living from './interfaces/Living';
 import EntityManager from './managers/EntityManager';
 
 const FPS = 60;

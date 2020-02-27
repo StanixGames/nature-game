@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
-import Entity from './entities/Entity';
-import Drawable from './entities/Drawable';
+import Entity from './interfaces/Entity';
+import Drawable from './interfaces/Drawable';
 import { Game } from './Game';
 
 class Renderer {

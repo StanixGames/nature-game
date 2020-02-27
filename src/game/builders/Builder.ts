@@ -1,4 +1,4 @@
-import Entity from '../entities/Entity';
+import Entity from '../interfaces/Entity';
 
 // export interface Producable {
 //   // new(type: string)

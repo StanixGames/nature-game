@@ -1,7 +1,7 @@
 import { Graphics } from 'pixi.js';
-import Entity from './Entity';
-import Living from './Living';
-import Drawable from './Drawable';
+import Entity from '../interfaces/Entity';
+import Living from '../interfaces/Living';
+import Drawable from '../interfaces/Drawable';
 
 class EnemyEntity implements Entity, Drawable, Living {
   name: string = 'ant';
@@ -11,7 +11,7 @@ class EnemyEntity implements Entity, Drawable, Living {
   size = 5;
 
   update(): void {
-    
+
   }
 
   render(g: Graphics) {
