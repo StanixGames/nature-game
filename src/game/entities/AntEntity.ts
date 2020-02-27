@@ -1,11 +1,12 @@
 import { Graphics } from 'pixi.js';
+import Mutation from './mutations/Mutation';
 import Entity from '../interfaces/Entity';
 import Living from '../interfaces/Living';
 import Drawable from '../interfaces/Drawable';
-import Moving from '../interfaces/Moving';
+import Mutable from '../interfaces/Mutable';
 import SmartLevelOne from '../interfaces/SmartLevelOne';
 
-class AntEntity implements Entity, Drawable, Living, Moving, SmartLevelOne {
+class AntEntity implements Entity, Drawable, Living, Mutable, SmartLevelOne {
   name: string = 'ant';
   hp: number = 100;
   x = 100;
@@ -18,14 +19,20 @@ class AntEntity implements Entity, Drawable, Living, Moving, SmartLevelOne {
   targetY = -1;
   targetSelected = false;
   targetRadius = 20;
+  mutations: Mutation[];
 
-  constructor(x: number, y: number, size: number, velX: number, velY: number, speed: number) {
+  constructor(x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Mutation[]) {
     this.x = x;
     this.y = y;
     this.size = size;
     this.velX = velX;
     this.velY = velY;
     this.speed = speed;
+    this.mutations = mutations;
+  }
+
+  mutate(): void {
+    this.mutations.forEach((mutation) => mutation.mutate(this));
   }
 
   nextTarget() {
@@ -66,6 +73,7 @@ class AntEntity implements Entity, Drawable, Living, Moving, SmartLevelOne {
   }
 
   update(): void {
+    this.mutate();
     this.nextTarget();
     if (this.velX !== 0) {
       this.x += this.velX;

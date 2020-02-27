@@ -4,6 +4,7 @@ import { Builder } from './Builder';
 import { EntityType } from '../types';
 import Vector from '../interfaces/Vector';
 import Size from '../interfaces/Size';
+import Mutation from '../entities/mutations/Mutation';
 import EnemyEntity from '../entities/EnemyEntity';
 
 class EntityBuilder extends Builder<Entity> {
@@ -11,6 +12,7 @@ class EntityBuilder extends Builder<Entity> {
   position: Vector = { x: 0, y: 0 };
   velocity: Vector = { x: 0, y: 0 };
   size: number = 1;
+  mutations: Mutation[] = [];
 
   constructor() {
     super();
@@ -18,6 +20,11 @@ class EntityBuilder extends Builder<Entity> {
 
   create(type: EntityType) {
     this.type = type;
+    this.speed = 0;
+    this.position = { x: 0, y: 0 };
+    this.velocity = { x: 0, y: 0 };
+    this.size = 1;
+    this.mutations = [];
     return this;
   }
 
@@ -41,6 +48,11 @@ class EntityBuilder extends Builder<Entity> {
     return this;
   }
 
+  addMutation(mutation: Mutation) {
+    this.mutations.push(mutation);
+    return this;
+  }
+
   build(): Entity {
     switch (this.type) {
       case EntityType.Ant:
@@ -51,6 +63,7 @@ class EntityBuilder extends Builder<Entity> {
           this.velocity.x,
           this.velocity.y,
           this.speed,
+          this.mutations,
         );
       case EntityType.Enemy:
         return new EnemyEntity();
