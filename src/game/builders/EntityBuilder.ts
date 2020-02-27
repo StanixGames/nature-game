@@ -12,7 +12,7 @@ class EntityBuilder extends Builder<Entity> {
   position: Vector = { x: 0, y: 0 };
   velocity: Vector = { x: 0, y: 0 };
   size: number = 1;
-  mutations: Mutation[] = [];
+  mutations: Map<string, Mutation> = new Map();
 
   constructor() {
     super();
@@ -24,7 +24,7 @@ class EntityBuilder extends Builder<Entity> {
     this.position = { x: 0, y: 0 };
     this.velocity = { x: 0, y: 0 };
     this.size = 1;
-    this.mutations = [];
+    this.mutations = new Map();
     return this;
   }
 
@@ -49,7 +49,7 @@ class EntityBuilder extends Builder<Entity> {
   }
 
   addMutation(mutation: Mutation) {
-    this.mutations.push(mutation);
+    this.mutations.set(mutation.name, mutation);
     return this;
   }
 

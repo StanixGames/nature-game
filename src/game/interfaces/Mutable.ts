@@ -1,7 +1,7 @@
 import Mutation from '../entities/mutations/Mutation';
 
 interface Mutable {
-  mutations: Mutation[];
+  mutations: Map<string, Mutation>;
   mutate(): void;
 }
 

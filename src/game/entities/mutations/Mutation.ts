@@ -1,4 +1,5 @@
 interface Mutation {
+  name: string;
   mutate(entity: any): void;
 }
 

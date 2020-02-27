@@ -19,9 +19,9 @@ class AntEntity implements Entity, Drawable, Living, Mutable, SmartLevelOne {
   targetY = -1;
   targetSelected = false;
   targetRadius = 20;
-  mutations: Mutation[];
+  mutations: Map<string, Mutation>;
 
-  constructor(x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Mutation[]) {
+  constructor(x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Map<string, Mutation>) {
     this.x = x;
     this.y = y;
     this.size = size;
@@ -74,7 +74,7 @@ class AntEntity implements Entity, Drawable, Living, Mutable, SmartLevelOne {
 
   update(): void {
     this.mutate();
-    this.nextTarget();
+    // this.nextTarget();
     if (this.velX !== 0) {
       this.x += this.velX;
     }
