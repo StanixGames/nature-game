@@ -6,6 +6,7 @@ import EnemyEntity from '../entities/EnemyEntity';
 import EatMutation from '../entities/mutations/EatMutation';
 import SizeMutation from '../entities/mutations/SizeMutation';
 import MoveMutation from '../entities/mutations/MoveMutation';
+import IdleMutation from '../entities/mutations/IdleMutation';
 import { BuilderType, EntityType } from '../types';
 
 class EntityManager {
@@ -13,9 +14,6 @@ class EntityManager {
   readonly enemies: Entity[] = [];
 
   constructor() {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
     const bc = new BuilderCreator();
     const builder = bc.createEntityBuilder();
 
@@ -25,16 +23,18 @@ class EntityManager {
 
     // for(let i = 0; i < 10; i+= 1) {
     //   setTimeout(() => {
-    for (let i = 0; i < 500; i += 1) {
-      // const Mutation = Math.random() > 0.2 ? EatMutation : SizeMutation;
+    for (let i = 0; i < 2000; i += 1) {
+      const x = window.innerWidth * Math.random();
+      const y = window.innerHeight * Math.random();
+      const Mutation = (i === 0) ? IdleMutation : EatMutation;
       const speed = 1;
-      const size = ((1 - speed) + 1) * 8;
+      const size = 2; // ((1 - speed) + 1) * 8;
       const ant = builder
         .create(EntityType.Ant)
-        .setPosition(centerX, centerY)
+        .setPosition(x, y)
         .setSize(size)
         .setSpeed(speed)
-        .addMutation(new EatMutation)
+        .addMutation(new Mutation)
         .addMutation(new MoveMutation)
         .build();
       this.ants.push(ant);
@@ -54,4 +54,4 @@ class EntityManager {
   // }
 }
 
-export default EntityManager;
+export default new EntityManager;

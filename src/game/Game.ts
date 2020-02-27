@@ -10,7 +10,7 @@ export class Game {
   readonly value: number;
   readonly rndr: Renderer;
   readonly app: PIXI.Application;
-  readonly em: EntityManager;
+  readonly em = EntityManager;
   // private working: boolean;
 
   constructor() {
@@ -22,7 +22,7 @@ export class Game {
       resolution: window.devicePixelRatio || 1,
     });
     this.rndr = new Renderer(this);
-    this.em = new EntityManager();
+    // this.em = EntityManager;
     // this.working = false;
   }
 
