@@ -1,8 +1,30 @@
 import * as PIXI from 'pixi.js';
+import Entity from './entities/Entity';
+import Drawable from './entities/Drawable';
+import { Game } from './Game';
 
 class Renderer {
-  render() {
-    console.log('render');
+  readonly game: Game;
+  readonly g: PIXI.Graphics;
+
+  constructor(game: Game) {
+    this.game = game;
+    this.g = new PIXI.Graphics();
+  }
+
+  init() {
+    // init graphics for the layer
+    this.game.app.stage.addChild(this.g);
+  }
+
+  beforeRender(): void {
+    this.g.clear();
+  }
+
+  render(entities: Entity[]): void {
+    entities.forEach(
+      (entity) => (entity as Drawable).render(this.g)
+    );
   }
 }
 

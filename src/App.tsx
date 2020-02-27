@@ -9,7 +9,7 @@ function App() {
   
   return (
     <div className="wrapper">
-      sdf
+      <div id="game" />
     </div>
   );
 }

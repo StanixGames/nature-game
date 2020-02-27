@@ -1,8 +1,10 @@
-export interface Producable {
-  // new(type: string)
-}
+import Entity from '../entities/Entity';
 
-export abstract class Builder<T extends Producable> {
+// export interface Producable {
+//   // new(type: string)
+// }
+
+export abstract class Builder<T extends Entity> {
   protected product?: T;
   protected type?: string;
 

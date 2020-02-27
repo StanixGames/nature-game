@@ -22,7 +22,7 @@ class EntityBuilder extends Builder<Entity> {
       case EntityType.Enemy:
         return new EnemyEntity();
       default:
-        return {};
+        throw new Error('Invalid entity type!');
     }
   }
 }
