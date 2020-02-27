@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import game from './game';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    game.init();
+  }, []);
+  
   return (
     <div className="wrapper">
       sdf
