@@ -16,26 +16,8 @@ class EntityManager {
   constructor() {
     const bc = new BuilderCreator();
     const builder = bc.createEntityBuilder();
-
-    // for (let i = 0; i < 20; i += 1) {
-    //   const id = i;
-    //   const x = window.innerWidth * Math.random();
-    //   const y = window.innerHeight * Math.random();
-    //   const speed = 1;
-    //   const size = ((1 - speed) + 1) * 2;
-    //   const ant = builder
-    //     .create(EntityType.Ant)
-    //     .setId(id)
-    //     .setPosition(x, y)
-    //     .setSize(size)
-    //     .setSpeed(speed)
-    //     .addMutation(new IdleMutation)
-    //     .addMutation(new MoveMutation)
-    //     .build();
-    //   this.ants.set(id, ant);
-    // }
     
-    for (let i = 0; i < 20; i += 1) {
+    for (let i = 0; i < 40; i += 1) {
       const id = i;
       const x = window.innerWidth * Math.random();
       const y = window.innerHeight * Math.random();
@@ -58,7 +40,7 @@ class EntityManager {
     }
 
     setTimeout(() => {
-      for (let i = 0; i < 20; i += 1) {
+      for (let i = 0; i < 10; i += 1) {
         const id = i;
         const x = window.innerWidth * Math.random();
         const y = window.innerHeight * Math.random();
@@ -75,7 +57,7 @@ class EntityManager {
           .build();
         this.ants.set(id, ant);
       }
-    }, 4000);
+    }, 1000);
   }
 
   getRandomAnt(): Entity | null {
@@ -100,14 +82,6 @@ class EntityManager {
       this.ants.delete(id);
     }
   }
-
-  // getAntsDrawable(): Drawable[] {
-  //   return this.ants as Drawable[];
-  // }
-
-  // getEnemiesDrawable(): Drawable[] {
-  //   return this.enemies as Drawable[];
-  // }
 }
 
 export default new EntityManager;

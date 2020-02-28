@@ -1,4 +1,5 @@
 import Entity from '../../interfaces/Entity';
+import Drawable from '../../interfaces/Drawable';
 import Living from '../../interfaces/Living';
 import Mutation from './Mutation';
 import EntityManager from '../../managers/EntityManager';
@@ -6,30 +7,32 @@ import EntityManager from '../../managers/EntityManager';
 class EatMutation implements Mutation {
   name: string = 'eat';
   targetSelected: boolean = false;
-  targetEntity?: Entity;
+  targetEntity: Entity | null = null;
   targetRadius: number = 10;
 
-  mutate(entity: any): void {
+  mutate(entity: Entity): void {
     if (!this.targetSelected) {
-      const entity = EntityManager.getRandomAnt();
+      const targetEntity = EntityManager.getRandomAnt();
 
-      if (entity) {
-        this.targetEntity = entity;
+      if (targetEntity) {
+        this.targetEntity = targetEntity;
         this.targetSelected = true;
+        (<Drawable>entity).color = 0xFF0000;
       }
     } else {
       if (this.targetEntity) {
         const { id, x, y, size } = <Living>this.targetEntity;
         const distance = Math.sqrt(
-          Math.pow((entity.x - x), 2) +
-          Math.pow((entity.y - y), 2)
+          Math.pow(((<Living>entity).x - x), 2) +
+          Math.pow(((<Living>entity).y - y), 2)
         );
-        const minSize = entity.size / 2 + size / 2;
+        const minSize = (<Living>entity).size / 2 + size / 2;
 
         if (distance < minSize) {
           EntityManager.killAnt(id);
           this.targetSelected = false;
-          this.targetEntity = undefined;
+          this.targetEntity = null;
+          (<Drawable>entity).color = 0xFF00FF;
         }
       }
     }

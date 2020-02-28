@@ -8,6 +8,7 @@ import Moving from '../interfaces/Moving';
 class EnemyEntity implements Drawable, Living, Mutable, Moving {
   id: number = 0;
   name: string = 'ant';
+  color: number = 0xFF00FF;
   hp: number = 100;
   x = 200;
   y = 200;
@@ -53,7 +54,7 @@ class EnemyEntity implements Drawable, Living, Mutable, Moving {
 
   render(g: Graphics) {
     const semiSize = this.size / 2;
-    g.beginFill(0xFF0000, 0.6);
+    g.beginFill(this.color, 0.6);
     g.moveTo(this.x - semiSize, this.y - semiSize);
     g.lineTo(this.x + semiSize, this.y - semiSize);
     g.lineTo(this.x + semiSize, this.y + semiSize);
