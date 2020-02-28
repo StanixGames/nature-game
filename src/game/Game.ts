@@ -2,19 +2,24 @@ import * as PIXI from 'pixi.js';
 import Renderer from './Renderer';
 import Living from './interfaces/Living';
 import EntityManager from './managers/EntityManager';
+import WorldManager from './managers/WorldManager';
 
 const FPS = 60;
 const FT = 1000/FPS;
 
 export class Game {
+  readonly worldManager: WorldManager;
+  readonly entityManager: EntityManager;
   readonly value: number;
   readonly rndr: Renderer;
   readonly app: PIXI.Application;
-  readonly em = EntityManager;
   // private working: boolean;
 
   constructor() {
     this.value = 10;
+    this.worldManager = new WorldManager(this);
+    this.entityManager = new EntityManager(this);
+
     this.app = new PIXI.Application({
       width: window.innerWidth,
       height: window.innerHeight,
@@ -43,11 +48,11 @@ export class Game {
   }
 
   tick = () => {
-    this.em.getAnts().forEach((entity) => (<Living>entity).update());
-    this.em.getEnemies().forEach((entity) => (<Living>entity).update());
+    this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
+    this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
     this.rndr.beforeRender();
-    this.rndr.render(this.em.getAnts());
-    this.rndr.render(this.em.getEnemies());
+    this.rndr.render(this.entityManager.getAnts());
+    this.rndr.render(this.entityManager.getEnemies());
   }
 }
 

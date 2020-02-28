@@ -1,8 +1,8 @@
+import Game from '../../Game';
 import Entity from '../../interfaces/Entity';
 import Drawable from '../../interfaces/Drawable';
 import Living from '../../interfaces/Living';
 import Mutation from './Mutation';
-import EntityManager from '../../managers/EntityManager';
 
 class EatMutation implements Mutation {
   name: string = 'eat';
@@ -12,7 +12,7 @@ class EatMutation implements Mutation {
 
   mutate(entity: Entity): void {
     if (!this.targetSelected) {
-      const targetEntity = EntityManager.getRandomAnt();
+      const targetEntity = Game.entityManager.getRandomAnt();
 
       if (targetEntity) {
         this.targetEntity = targetEntity;
@@ -29,7 +29,7 @@ class EatMutation implements Mutation {
         const minSize = (<Living>entity).size / 2 + size / 2;
 
         if (distance < minSize) {
-          EntityManager.killAnt(id);
+          Game.entityManager.killAnt(id);
           this.targetSelected = false;
           this.targetEntity = null;
           (<Drawable>entity).color = 0xFF00FF;

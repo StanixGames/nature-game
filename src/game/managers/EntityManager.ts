@@ -1,3 +1,5 @@
+import { Game } from '../Game';
+import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
 import Drawable from '../interfaces/Drawable';
@@ -9,11 +11,13 @@ import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
 import { EntityType } from '../types';
 
-class EntityManager {
+export default class EntityManager extends Manager {
   protected ants: Map<number, Entity> = new Map();
   readonly enemies: Map<number, Entity> = new Map();
 
-  constructor() {
+  constructor(game: Game) {
+    super(game);
+
     const bc = new BuilderCreator();
     const builder = bc.createEntityBuilder();
     
@@ -30,7 +34,7 @@ class EntityManager {
         .setPosition(x, y)
         .setSize(size)
         .setSpeed(speed)
-        .setMoment(0.01)
+        .setMoment(0.001)
         .setMaxSpeed(maxSpeed)
         .addMutation(new EatMutation)
         .addMutation(new IdleMutation)
@@ -60,6 +64,14 @@ class EntityManager {
     }, 1000);
   }
 
+  init(): void {
+    // todo setup
+  }
+  
+  destroy(): void {
+    // todo clean up
+  }
+
   getRandomAnt(): Entity | null {
     if (this.ants.size > 0) {
       const antsArray = Array.from(this.ants.values());
@@ -83,5 +95,3 @@ class EntityManager {
     }
   }
 }
-
-export default new EntityManager;
