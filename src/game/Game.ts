@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import Renderer from './Renderer';
+import Renderer, { RenderLayer } from './Renderer';
 import Living from './interfaces/Living';
 import EntityManager from './managers/EntityManager';
 import WorldManager from './managers/WorldManager';
@@ -53,8 +53,8 @@ export class Game {
     this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
     this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
     this.rndr.beforeRender();
-    this.rndr.render(1, this.entityManager.getAnts());
-    this.rndr.render(2, this.entityManager.getEnemies());
+    this.rndr.render(RenderLayer.ANTS, this.entityManager.getAnts());
+    this.rndr.render(RenderLayer.ENEMIES, this.entityManager.getEnemies());
   }
 }
 

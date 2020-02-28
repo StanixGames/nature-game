@@ -3,6 +3,13 @@ import Entity from './interfaces/Entity';
 import Drawable from './interfaces/Drawable';
 import { Game } from './Game';
 
+export enum RenderLayer {
+  BG,
+  ANTS,
+  ENEMIES,
+  EFFECTS,
+};
+
 class Renderer {
   readonly game: Game;
   readonly layers: [
@@ -33,9 +40,9 @@ class Renderer {
     this.layers.forEach((layer) => layer.clear());
   }
 
-  render(layerIndex: number, entities: Map<string, Entity>): void {
+  render(layer: RenderLayer, entities: Map<string, Entity>): void {
     entities.forEach(
-      (entity) => (<Drawable>entity).render(this.layers[layerIndex])
+      (entity) => (<Drawable>entity).render(this.layers[layer])
     );
   }
 }
