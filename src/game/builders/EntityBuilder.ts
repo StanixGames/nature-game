@@ -8,7 +8,10 @@ import Mutation from '../entities/mutations/Mutation';
 import EnemyEntity from '../entities/EnemyEntity';
 
 class EntityBuilder extends Builder<Entity> {
+  id: number = 0;
+  moment: number = 0;
   speed: number = 0;
+  maxSpeed: number = 1;
   position: Vector = { x: 0, y: 0 };
   velocity: Vector = { x: 0, y: 0 };
   size: number = 1;
@@ -25,6 +28,11 @@ class EntityBuilder extends Builder<Entity> {
     this.velocity = { x: 0, y: 0 };
     this.size = 1;
     this.mutations = new Map();
+    return this;
+  }
+
+  setId(id: number) {
+    this.id = id;
     return this;
   }
 
@@ -48,6 +56,16 @@ class EntityBuilder extends Builder<Entity> {
     return this;
   }
 
+  setMoment(moment: number) {
+    this.moment = moment;
+    return this;
+  }
+
+  setMaxSpeed(maxSpeed: number) {
+    this.maxSpeed = maxSpeed;
+    return this;
+  }
+
   addMutation(mutation: Mutation) {
     this.mutations.set(mutation.name, mutation);
     return this;
@@ -57,6 +75,7 @@ class EntityBuilder extends Builder<Entity> {
     switch (this.type) {
       case EntityType.Ant:
         return new AntEntity(
+          this.id,
           this.position.x,
           this.position.y,
           this.size,
@@ -66,7 +85,18 @@ class EntityBuilder extends Builder<Entity> {
           this.mutations,
         );
       case EntityType.Enemy:
-        return new EnemyEntity();
+        return new EnemyEntity(
+          this.id,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.velocity.x,
+          this.velocity.y,
+          this.moment,
+          this.speed,
+          this.maxSpeed,
+          this.mutations,
+        );
       default:
         throw new Error('Invalid entity type!');
     }

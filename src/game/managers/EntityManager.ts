@@ -7,42 +7,98 @@ import EatMutation from '../entities/mutations/EatMutation';
 import SizeMutation from '../entities/mutations/SizeMutation';
 import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
-import { BuilderType, EntityType } from '../types';
+import { EntityType } from '../types';
 
 class EntityManager {
-  readonly ants: Entity[] = [];
-  readonly enemies: Entity[] = [];
+  protected ants: Map<number, Entity> = new Map();
+  readonly enemies: Map<number, Entity> = new Map();
 
   constructor() {
     const bc = new BuilderCreator();
     const builder = bc.createEntityBuilder();
 
-    const enemy = builder
-      .create(EntityType.Enemy)
-      .build();
-
-    // for(let i = 0; i < 10; i+= 1) {
-    //   setTimeout(() => {
-    for (let i = 0; i < 2000; i += 1) {
+    // for (let i = 0; i < 20; i += 1) {
+    //   const id = i;
+    //   const x = window.innerWidth * Math.random();
+    //   const y = window.innerHeight * Math.random();
+    //   const speed = 1;
+    //   const size = ((1 - speed) + 1) * 2;
+    //   const ant = builder
+    //     .create(EntityType.Ant)
+    //     .setId(id)
+    //     .setPosition(x, y)
+    //     .setSize(size)
+    //     .setSpeed(speed)
+    //     .addMutation(new IdleMutation)
+    //     .addMutation(new MoveMutation)
+    //     .build();
+    //   this.ants.set(id, ant);
+    // }
+    
+    for (let i = 0; i < 20; i += 1) {
+      const id = i;
       const x = window.innerWidth * Math.random();
       const y = window.innerHeight * Math.random();
-      const Mutation = (i === 0) ? IdleMutation : EatMutation;
-      const speed = 1;
-      const size = 2; // ((1 - speed) + 1) * 8;
-      const ant = builder
-        .create(EntityType.Ant)
+      const speed = 0.2;
+      const maxSpeed = 0.2;
+      const size = ((1 - speed) + 1) * 2;
+      const enemy = builder
+        .create(EntityType.Enemy)
+        .setId(id)
         .setPosition(x, y)
         .setSize(size)
         .setSpeed(speed)
-        .addMutation(new Mutation)
+        .setMoment(0.01)
+        .setMaxSpeed(maxSpeed)
+        .addMutation(new EatMutation)
+        .addMutation(new IdleMutation)
         .addMutation(new MoveMutation)
         .build();
-      this.ants.push(ant);
+      this.enemies.set(id, enemy);
     }
-      // }, i * 50);
-    // }
-    
-    this.enemies.push(enemy);
+
+    setTimeout(() => {
+      for (let i = 0; i < 20; i += 1) {
+        const id = i;
+        const x = window.innerWidth * Math.random();
+        const y = window.innerHeight * Math.random();
+        const speed = 1;
+        const size = ((1 - speed) + 1) * 2;
+        const ant = builder
+          .create(EntityType.Ant)
+          .setId(id)
+          .setPosition(x, y)
+          .setSize(size)
+          .setSpeed(speed)
+          .addMutation(new IdleMutation)
+          .addMutation(new MoveMutation)
+          .build();
+        this.ants.set(id, ant);
+      }
+    }, 4000);
+  }
+
+  getRandomAnt(): Entity | null {
+    if (this.ants.size > 0) {
+      const antsArray = Array.from(this.ants.values());
+      const randIndex = Math.floor(antsArray.length * Math.random());
+      return antsArray[randIndex];
+    }
+    return null;
+  }
+
+  getAnts(): Map<number, Entity> {
+    return this.ants;
+  }
+
+  getEnemies(): Map<number, Entity> {
+    return this.enemies;
+  }
+
+  killAnt(id: number): void {
+    if (this.ants.get(id)) {
+      this.ants.delete(id);
+    }
   }
 
   // getAntsDrawable(): Drawable[] {

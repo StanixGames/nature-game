@@ -1,5 +1,5 @@
 import Entity from '../../interfaces/Entity';
-import Vector from '../../interfaces/Vector';
+import Living from '../../interfaces/Living';
 import Mutation from './Mutation';
 import EntityManager from '../../managers/EntityManager';
 
@@ -10,19 +10,29 @@ class EatMutation implements Mutation {
   targetRadius: number = 10;
 
   mutate(entity: any): void {
-      if (!this.targetSelected) {
-        this.targetEntity = EntityManager.ants[0];
+    if (!this.targetSelected) {
+      const entity = EntityManager.getRandomAnt();
+
+      if (entity) {
+        this.targetEntity = entity;
         this.targetSelected = true;
-  
       }
-      // else if (
-      //   entity.x > this.targetPosition.x - this.targetRadius &&
-      //   entity.x < this.targetPosition.x + this.targetRadius &&
-      //   entity.y > this.targetPosition.y - this.targetRadius &&
-      //   entity.y < this.targetPosition.y + this.targetRadius
-      // ) {
-      //   this.targetSelected = false;
-      // }
+    } else {
+      if (this.targetEntity) {
+        const { id, x, y, size } = <Living>this.targetEntity;
+        const distance = Math.sqrt(
+          Math.pow((entity.x - x), 2) +
+          Math.pow((entity.y - y), 2)
+        );
+        const minSize = entity.size / 2 + size / 2;
+
+        if (distance < minSize) {
+          EntityManager.killAnt(id);
+          this.targetSelected = false;
+          this.targetEntity = undefined;
+        }
+      }
+    }
   }
 }
 

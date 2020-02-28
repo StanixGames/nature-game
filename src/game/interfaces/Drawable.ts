@@ -1,6 +1,7 @@
+import Entity from './Entity';
 import { Graphics } from 'pixi.js';
 
-interface Drawable {
+interface Drawable extends Entity {
   render(g: Graphics): void;
 }
 

@@ -43,10 +43,11 @@ export class Game {
   }
 
   tick = () => {
-    this.em.ants.forEach((entity) => (entity as Living).update());
+    this.em.getAnts().forEach((entity) => (<Living>entity).update());
+    this.em.getEnemies().forEach((entity) => (<Living>entity).update());
     this.rndr.beforeRender();
-    this.rndr.render(this.em.ants);
-    this.rndr.render(this.em.enemies);
+    this.rndr.render(this.em.getAnts());
+    this.rndr.render(this.em.getEnemies());
   }
 }
 

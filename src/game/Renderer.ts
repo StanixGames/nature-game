@@ -21,9 +21,9 @@ class Renderer {
     this.g.clear();
   }
 
-  render(entities: Entity[]): void {
+  render(entities: Map<number, Entity>): void {
     entities.forEach(
-      (entity) => (entity as Drawable).render(this.g)
+      (entity) => (<Drawable>entity).render(this.g)
     );
   }
 }
