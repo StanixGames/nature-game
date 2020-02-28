@@ -5,25 +5,37 @@ import { Game } from './Game';
 
 class Renderer {
   readonly game: Game;
-  readonly g: PIXI.Graphics;
+  readonly layers: [
+    PIXI.Graphics, // bg
+    PIXI.Graphics, // ants
+    PIXI.Graphics, // enemies
+    PIXI.Graphics, // effects
+  ];
 
   constructor(game: Game) {
     this.game = game;
-    this.g = new PIXI.Graphics();
+    this.layers = [
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+    ];
   }
 
   init() {
     // init graphics for the layer
-    this.game.app.stage.addChild(this.g);
+    this.layers.forEach((layer) => {
+      this.game.app.stage.addChild(layer);
+    });
   }
 
   beforeRender(): void {
-    this.g.clear();
+    this.layers.forEach((layer) => layer.clear());
   }
 
-  render(entities: Map<number, Entity>): void {
+  render(layerIndex: number, entities: Map<string, Entity>): void {
     entities.forEach(
-      (entity) => (<Drawable>entity).render(this.g)
+      (entity) => (<Drawable>entity).render(this.layers[layerIndex])
     );
   }
 }

@@ -41,6 +41,8 @@ export class Game {
     this.app.ticker.add(this.tick);
     
     this.rndr.init();
+    this.entityManager.init();
+    this.worldManager.init();
   }
 
   start() {
@@ -51,8 +53,8 @@ export class Game {
     this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
     this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
     this.rndr.beforeRender();
-    this.rndr.render(this.entityManager.getAnts());
-    this.rndr.render(this.entityManager.getEnemies());
+    this.rndr.render(1, this.entityManager.getAnts());
+    this.rndr.render(2, this.entityManager.getEnemies());
   }
 }
 

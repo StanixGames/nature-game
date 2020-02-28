@@ -5,7 +5,7 @@ import Drawable from '../interfaces/Drawable';
 import Mutable from '../interfaces/Mutable';
 
 class AntEntity implements Drawable, Living, Mutable {
-  id: number;
+  id: string;
   name: string = 'ant';
   color: number = 0xFFFF00;
   hp: number = 100;
@@ -17,7 +17,7 @@ class AntEntity implements Drawable, Living, Mutable {
   speed = 0;
   mutations: Map<string, Mutation>;
 
-  constructor(id: number, x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Map<string, Mutation>) {
+  constructor(id: string, x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Map<string, Mutation>) {
     this.id = id;
     this.x = x;
     this.y = y;

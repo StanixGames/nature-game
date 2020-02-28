@@ -6,7 +6,7 @@ import Mutable from '../interfaces/Mutable';
 import Moving from '../interfaces/Moving';
 
 class EnemyEntity implements Drawable, Living, Mutable, Moving {
-  id: number = 0;
+  id: string;
   name: string = 'ant';
   color: number = 0xFF00FF;
   hp: number = 100;
@@ -20,7 +20,7 @@ class EnemyEntity implements Drawable, Living, Mutable, Moving {
   maxSpeed = 1;
   mutations: Map<string, Mutation>;
 
-  constructor(id: number, x: number, y: number, size: number, velX: number, velY: number, moment: number, speed: number, maxSpeed: number, mutations: Map<string, Mutation>) {
+  constructor(id: string, x: number, y: number, size: number, velX: number, velY: number, moment: number, speed: number, maxSpeed: number, mutations: Map<string, Mutation>) {
     this.id = id;
     this.x = x;
     this.y = y;

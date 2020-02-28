@@ -1,5 +1,5 @@
 interface Entity {
-  id: number;
+  id: string;
 }
 
 export default Entity;

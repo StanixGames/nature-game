@@ -8,7 +8,7 @@ import Mutation from '../entities/mutations/Mutation';
 import EnemyEntity from '../entities/EnemyEntity';
 
 class EntityBuilder extends Builder<Entity> {
-  id: number = 0;
+  id: string = '';
   moment: number = 0;
   speed: number = 0;
   maxSpeed: number = 1;
@@ -31,7 +31,7 @@ class EntityBuilder extends Builder<Entity> {
     return this;
   }
 
-  setId(id: number) {
+  setId(id: string) {
     this.id = id;
     return this;
   }
