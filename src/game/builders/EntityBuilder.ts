@@ -1,5 +1,6 @@
 import Entity from '../interfaces/Entity';
 import AntEntity from '../entities/AntEntity';
+import FoodEntity from '../entities/FoodEntity';
 import { Builder } from './Builder';
 import { EntityType } from '../types';
 import Vector from '../interfaces/Vector';
@@ -96,6 +97,13 @@ class EntityBuilder extends Builder<Entity> {
           this.speed,
           this.maxSpeed,
           this.mutations,
+        );
+      case EntityType.Food:
+        return new FoodEntity(
+          this.id,
+          this.position.x,
+          this.position.y,
+          this.size,
         );
       default:
         throw new Error('Invalid entity type!');

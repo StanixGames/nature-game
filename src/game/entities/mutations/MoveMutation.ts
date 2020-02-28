@@ -21,7 +21,7 @@ class MoveMutation implements Mutation {
 
       const dx = Math.abs(entity.x - x);
       const dy = Math.abs(entity.y - y);
-      entity.maxSpeed = 2;
+      // entity.maxSpeed = 2;
       entity.velX = dx * entity.speed * 1 / distange;
       entity.velY = dy * entity.speed * 1 / distange;
 
@@ -40,7 +40,7 @@ class MoveMutation implements Mutation {
 
       const dx = Math.abs(entity.x - x);
       const dy = Math.abs(entity.y - y);
-      entity.maxSpeed = 0.2;
+      // entity.maxSpeed = 0.2;
       entity.velX = dx * (entity.speed * IDLE_SPEED_PERCENT) / distange;
       entity.velY = dy * (entity.speed * IDLE_SPEED_PERCENT) / distange;
 

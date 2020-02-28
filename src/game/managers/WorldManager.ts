@@ -7,11 +7,17 @@ export default class WorldManager extends Manager {
   }
 
   init(): void {
-    for (let i = 0; i< 3000; i++) {
+    for (let i = 0; i< 20; i++) {
       this.game.entityManager.createAnt();
-      this.game.entityManager.createEnemy();
+      // this.game.entityManager.createEnemy();
     }
-    // setInterval(() => this.game.entityManager.createAnt(), 1000);
+    
+    setInterval(() => {
+      const maxFood = Math.random() * 20 + 10;
+      for (let i = 0; i < maxFood; i++) {
+        this.game.entityManager.createFood();
+      }
+    }, 1000);
   }
   
   destroy(): void {

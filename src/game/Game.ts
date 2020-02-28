@@ -50,9 +50,13 @@ export class Game {
   }
 
   tick = () => {
+    // TODO fix update / render performace
+    this.entityManager.getBg().forEach((entity) => (<Living>entity).update());
     this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
     this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
+    
     this.rndr.beforeRender();
+    this.rndr.render(RenderLayer.BG, this.entityManager.getBg());
     this.rndr.render(RenderLayer.ANTS, this.entityManager.getAnts());
     this.rndr.render(RenderLayer.ENEMIES, this.entityManager.getEnemies());
   }

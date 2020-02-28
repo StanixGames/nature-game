@@ -12,7 +12,12 @@ class EatMutation implements Mutation {
 
   mutate(entity: Entity): void {
     if (!this.targetSelected) {
-      const targetEntity = Game.entityManager.getRandomAnt();
+      let targetEntity: Entity | null = null;
+      if (entity.name === 'enemy') {
+        targetEntity = Game.entityManager.getRandomAnt();
+      } else if (entity.name === 'ant') {
+        targetEntity = Game.entityManager.getRandomFood();
+      }
 
       if (targetEntity) {
         this.targetEntity = targetEntity;
@@ -29,7 +34,20 @@ class EatMutation implements Mutation {
         const minSize = (<Living>entity).size / 2 + size / 2;
 
         if (distance < minSize) {
-          Game.entityManager.killAnt(id);
+          if (entity.name === 'enemy') {
+            Game.entityManager.killAnt(id);
+          } else if (entity.name === 'ant') {
+            const killedFood = Game.entityManager.killFood(id);
+            if (killedFood) {
+              if (Math.random() > 0.01) {
+                Game.entityManager.createAnt(
+                 (<Living>entity).x + 10,
+                 (<Living>entity).y + 10,
+                );
+              }
+            }
+          }
+          
           this.targetSelected = false;
           this.targetEntity = null;
           (<Drawable>entity).color = 0xFF00FF;

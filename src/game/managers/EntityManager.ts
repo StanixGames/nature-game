@@ -15,6 +15,7 @@ import EntityBuilder from '../builders/EntityBuilder';
 
 export default class EntityManager extends Manager {
   protected builder: EntityBuilder;
+  protected bg: Map<string, Entity> = new Map();
   protected ants: Map<string, Entity> = new Map();
   protected enemies: Map<string, Entity> = new Map();
 
@@ -23,28 +24,6 @@ export default class EntityManager extends Manager {
 
     const bc = new BuilderCreator();
     this.builder = bc.createEntityBuilder();
-
-    // for (let i = 0; i < 40; i += 1) {
-    //   const id = i;
-    //   const x = window.innerWidth * Math.random();
-    //   const y = window.innerHeight * Math.random();
-    //   const speed = 0.2;
-    //   const maxSpeed = 0.2;
-    //   const size = ((1 - speed) + 1) * 2;
-    //   const enemy = builder
-    //     .create(EntityType.Enemy)
-    //     .setId(id)
-    //     .setPosition(x, y)
-    //     .setSize(size)
-    //     .setSpeed(speed)
-    //     .setMoment(0.001)
-    //     .setMaxSpeed(maxSpeed)
-    //     .addMutation(new EatMutation)
-    //     .addMutation(new IdleMutation)
-    //     .addMutation(new MoveMutation)
-    //     .build();
-    //   this.enemies.set(id, enemy);
-    // }
   }
 
   init(): void {
@@ -55,10 +34,8 @@ export default class EntityManager extends Manager {
     // todo clean up
   }
 
-  createAnt(): void {
+  createAnt(x: number = 0, y: number = 0): void {
     const id = uuidv1();
-    const x = window.innerWidth * Math.random();
-    const y = window.innerHeight * Math.random();
     const speed = 1;
     const size = ((1 - speed) + 1) * 2;
     const ant = this.builder
@@ -67,6 +44,9 @@ export default class EntityManager extends Manager {
       .setPosition(x, y)
       .setSize(size)
       .setSpeed(speed)
+      .setMoment(0.001)
+      .setMaxSpeed(1)
+      .addMutation(new EatMutation)
       .addMutation(new IdleMutation)
       .addMutation(new MoveMutation)
       .build();
@@ -92,11 +72,34 @@ export default class EntityManager extends Manager {
     this.enemies.set(id, enemy);
   }
 
+  createFood(): void {
+    const id = uuidv1();
+    const x = window.innerWidth * Math.random();
+    const y = window.innerHeight * Math.random();
+    const size = 2;
+    const food = this.builder
+      .create(EntityType.Food)
+      .setId(id)
+      .setPosition(x, y)
+      .setSize(size)
+      .build();
+    this.bg.set(id, food);
+  }
+
   getRandomAnt(): Entity | null {
     if (this.ants.size > 0) {
       const antsArray = Array.from(this.ants.values());
       const randIndex = Math.floor(antsArray.length * Math.random());
       return antsArray[randIndex];
+    }
+    return null;
+  }
+
+  getRandomFood(): Entity | null {
+    if (this.bg.size > 0) {
+      const foodsArray = Array.from(this.bg.values());
+      const randIndex = Math.floor(foodsArray.length * Math.random());
+      return foodsArray[randIndex];
     }
     return null;
   }
@@ -109,9 +112,17 @@ export default class EntityManager extends Manager {
     return this.enemies;
   }
 
+  getBg(): Map<string, Entity> {
+    return this.bg;
+  }
+
   killAnt(id: string): void {
     if (this.ants.get(id)) {
       this.ants.delete(id);
     }
+  }
+
+  killFood(id: string): boolean {
+    return this.bg.delete(id);
   }
 }
