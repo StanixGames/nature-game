@@ -60,7 +60,7 @@ export default class EntityManager extends Manager {
     const speed = 1;
     const size = ((1 - speed) + 1) * 2;
     const enemy = this.builder
-      .create(EntityType.Ant)
+      .create(EntityType.Enemy)
       .setId(id)
       .setPosition(x, y)
       .setSize(size)

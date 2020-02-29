@@ -9,7 +9,7 @@ export default class WorldManager extends Manager {
   init(): void {
     for (let i = 0; i< 20; i++) {
       this.game.entityManager.createAnt();
-      // this.game.entityManager.createEnemy();
+      this.game.entityManager.createEnemy();
     }
     
     setInterval(() => {

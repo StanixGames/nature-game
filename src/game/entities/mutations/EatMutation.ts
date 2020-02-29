@@ -22,7 +22,7 @@ class EatMutation implements Mutation {
       if (targetEntity) {
         this.targetEntity = targetEntity;
         this.targetSelected = true;
-        (<Drawable>entity).color = 0xFF0000;
+        // (<Drawable>entity).color = 0xFF0000;
       }
     } else {
       if (this.targetEntity) {
@@ -50,7 +50,7 @@ class EatMutation implements Mutation {
           
           this.targetSelected = false;
           this.targetEntity = null;
-          (<Drawable>entity).color = 0xFF00FF;
+          // (<Drawable>entity).color = 0xFF00FF;
         }
       }
     }

@@ -1,5 +1,6 @@
 import { Graphics } from 'pixi.js';
 import Mutation from './mutations/Mutation';
+import EatMutation from './mutations/EatMutation';
 import Living from '../interfaces/Living';
 import Drawable from '../interfaces/Drawable';
 import Mutable from '../interfaces/Mutable';
