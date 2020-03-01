@@ -23,11 +23,15 @@ export class Game {
     this.worldRenderer = new WorldRenderer(this);
     this.entityRenderer = new EntityRenderer(this);
 
+    const gameElem = document.getElementById('root');
     this.app = new PIXI.Application({
       width: window.innerWidth,
       height: window.innerHeight,
       backgroundColor: 0x121721,
-      resolution: window.devicePixelRatio || 1,
+    });
+
+    window.addEventListener("resize", () => {
+      this.app.renderer.resize(window.innerWidth, window.innerHeight);
     });
   }
 

@@ -45,17 +45,17 @@ export default class EntityRenderer extends Renderer {
         this.entityLayer.lineTo(x - s2, y);
 
         // Debug
-        const mutation = (<Mutable><unknown>enemy).mutations.get('eat');
-        if (mutation) {
-          const eatMutation = <EatMutation>mutation;
-          if (eatMutation.targetEntity) {
-            const targetEntity = <Living>eatMutation.targetEntity;
-            this.entityLayer.lineStyle(1, 0xffffff);
-            this.entityLayer.moveTo(x, y);
-            this.entityLayer.lineTo(targetEntity.x, targetEntity.y);
-            this.entityLayer.lineStyle(0);
-          }
-        }
+        // const mutation = (<Mutable><unknown>enemy).mutations.get('eat');
+        // if (mutation) {
+        //   const eatMutation = <EatMutation>mutation;
+        //   if (eatMutation.targetEntity) {
+        //     const targetEntity = <Living>eatMutation.targetEntity;
+        //     this.entityLayer.lineStyle(1, 0xffffff);
+        //     this.entityLayer.moveTo(x, y);
+        //     this.entityLayer.lineTo(targetEntity.x, targetEntity.y);
+        //     this.entityLayer.lineStyle(0);
+        //   }
+        // }
 
         this.entityLayer.closePath();
       }

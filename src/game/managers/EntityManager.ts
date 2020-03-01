@@ -11,16 +11,25 @@ import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
 import { EntityType } from '../types';
 import EntityBuilder from '../builders/EntityBuilder';
+import QuadTree from '../../utils/QuadTree';
+import Rect from '../../utils/Rect';
+import Node from '../../utils/Node';
 
 export default class EntityManager extends Manager {
   protected builder: EntityBuilder;
   protected bg: Map<string, Entity> = new Map();
   protected ants: Map<string, Entity> = new Map();
   protected enemies: Map<string, Entity> = new Map();
+  protected bgTree: QuadTree;
 
   constructor(game: Game) {
     super(game);
 
+    this.bgTree = new QuadTree(
+      new Rect(0, 0, window.innerWidth, window.innerHeight),
+      100,
+      20
+    );
     const bc = new BuilderCreator();
     this.builder = bc.createEntityBuilder();
   }
@@ -83,6 +92,7 @@ export default class EntityManager extends Manager {
       .setSize(size)
       .build();
     this.bg.set(id, food);
+    this.bgTree.insert(food);
   }
 
   getRandomAnt(): Entity | null {
@@ -115,6 +125,10 @@ export default class EntityManager extends Manager {
     return this.bg;
   }
 
+  getBgTree(): QuadTree {
+    return this.bgTree;
+  }
+
   killAnt(id: string): void {
     if (this.ants.get(id)) {
       this.ants.delete(id);
@@ -122,6 +136,14 @@ export default class EntityManager extends Manager {
   }
 
   killFood(id: string): boolean {
-    return this.bg.delete(id);
+    const deleted = this.bg.delete(id);
+
+    if (deleted) {
+      const arr = Array.from(this.bg.values());
+      this.bgTree.clear();
+      this.bgTree.insert(arr);
+    }
+
+    return deleted;
   }
 }
