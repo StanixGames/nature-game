@@ -1,6 +1,5 @@
 import Game from '../../Game';
 import Entity from '../../interfaces/Entity';
-import Drawable from '../../interfaces/Drawable';
 import Living from '../../interfaces/Living';
 import Mutation from './Mutation';
 
@@ -22,7 +21,6 @@ class EatMutation implements Mutation {
       if (targetEntity) {
         this.targetEntity = targetEntity;
         this.targetSelected = true;
-        // (<Drawable>entity).color = 0xFF0000;
       }
     } else {
       if (this.targetEntity) {
@@ -50,7 +48,6 @@ class EatMutation implements Mutation {
           
           this.targetSelected = false;
           this.targetEntity = null;
-          // (<Drawable>entity).color = 0xFF00FF;
         }
       }
     }

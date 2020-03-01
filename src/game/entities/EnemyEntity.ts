@@ -2,14 +2,12 @@ import { Graphics } from 'pixi.js';
 import Mutation from './mutations/Mutation';
 import EatMutation from './mutations/EatMutation';
 import Living from '../interfaces/Living';
-import Drawable from '../interfaces/Drawable';
 import Mutable from '../interfaces/Mutable';
 import Moving from '../interfaces/Moving';
 
-class EnemyEntity implements Drawable, Living, Mutable, Moving {
+class EnemyEntity implements Living, Mutable, Moving {
   id: string;
   name: string = 'enemy';
-  color: number = 0xFF00FF;
   hp: number = 100;
   x = 200;
   y = 200;
@@ -51,37 +49,6 @@ class EnemyEntity implements Drawable, Living, Mutable, Moving {
     if (this.velY !== 0) {
       this.y += this.velY;
     }
-  }
-
-  render(g: Graphics) {
-    let color = 0xffFF00;
-    if (this.mutations.get('eat')) {
-      color = 0xff0000;
-    }
-
-    const semiSize = this.size / 2;
-    g.beginFill(this.color, 0.6);
-    g.moveTo(this.x - semiSize, this.y - semiSize);
-    g.lineTo(this.x + semiSize, this.y - semiSize);
-    g.lineTo(this.x + semiSize, this.y + semiSize);
-    g.lineTo(this.x - semiSize, this.y + semiSize);
-    g.lineTo(this.x - semiSize, this.y - semiSize);
-    g.closePath();
-
-    // Debug
-    const mutation = this.mutations.get('eat');
-    if (mutation) {
-      const eatMutation = <EatMutation>mutation;
-      if (eatMutation.targetEntity) {
-        const { x, y } = <Living>eatMutation.targetEntity;
-        console.log(x, y);
-        g.lineStyle(0.5, 0xffffff)
-        g.moveTo(this.x, this.y);
-        g.lineTo(x, y);
-      }
-    }
-
-    g.closePath();
   }
 }
 

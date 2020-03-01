@@ -2,13 +2,11 @@ import { Graphics } from 'pixi.js';
 import Mutation from './mutations/Mutation';
 import EatMutation from './mutations/EatMutation';
 import Living from '../interfaces/Living';
-import Drawable from '../interfaces/Drawable';
 import Mutable from '../interfaces/Mutable';
 
-class AntEntity implements Drawable, Living, Mutable {
+class AntEntity implements Living, Mutable {
   id: string;
   name: string = 'ant';
-  color: number = 0xFFFF00;
   hp: number = 100;
   x = 100;
   y = 100;
@@ -41,16 +39,6 @@ class AntEntity implements Drawable, Living, Mutable {
     if (this.velY !== 0) {
       this.y += this.velY;
     }
-  }
-
-  render(g: Graphics) {
-    // let color = 0xffFF00;
-    // if (this.mutations.get('eat')) {
-    //   color = 0xff0000;
-    // }
-    g.beginFill(this.color, 0.6);
-    g.drawCircle(this.x, this.y, this.size);
-    g.closePath();
   }
 }
 

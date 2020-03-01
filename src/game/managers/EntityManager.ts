@@ -3,7 +3,6 @@ import { Game } from '../Game';
 import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
-import Drawable from '../interfaces/Drawable';
 import AntEntity from '../entities/AntEntity';
 import EnemyEntity from '../entities/EnemyEntity';
 import EatMutation from '../entities/mutations/EatMutation';
@@ -37,7 +36,7 @@ export default class EntityManager extends Manager {
   createAnt(x: number = 0, y: number = 0): void {
     const id = uuidv1();
     const speed = 1;
-    const size = ((1 - speed) + 1) * 2;
+    const size = 2;
     const ant = this.builder
       .create(EntityType.Ant)
       .setId(id)
@@ -58,7 +57,7 @@ export default class EntityManager extends Manager {
     const x = window.innerWidth * Math.random();
     const y = window.innerHeight * Math.random();
     const speed = 1;
-    const size = ((1 - speed) + 1) * 2;
+    const size = 6;
     const enemy = this.builder
       .create(EntityType.Enemy)
       .setId(id)
@@ -76,7 +75,7 @@ export default class EntityManager extends Manager {
     const id = uuidv1();
     const x = window.innerWidth * Math.random();
     const y = window.innerHeight * Math.random();
-    const size = 2;
+    const size = 4;
     const food = this.builder
       .create(EntityType.Food)
       .setId(id)

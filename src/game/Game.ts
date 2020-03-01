@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
-import Renderer, { RenderLayer } from './Renderer';
 import Living from './interfaces/Living';
 import EntityManager from './managers/EntityManager';
 import WorldManager from './managers/WorldManager';
+import WorldRenderer from './renderers/WorldRenderer';
+import EntityRenderer from './renderers/EntityRenderer';
 
 const FPS = 60;
 const FT = 1000/FPS;
@@ -10,15 +11,17 @@ const FT = 1000/FPS;
 export class Game {
   readonly worldManager: WorldManager;
   readonly entityManager: EntityManager;
+  readonly worldRenderer: WorldRenderer;
+  readonly entityRenderer: EntityRenderer;
   readonly value: number;
-  readonly rndr: Renderer;
   readonly app: PIXI.Application;
-  // private working: boolean;
 
   constructor() {
     this.value = 10;
     this.worldManager = new WorldManager(this);
     this.entityManager = new EntityManager(this);
+    this.worldRenderer = new WorldRenderer(this);
+    this.entityRenderer = new EntityRenderer(this);
 
     this.app = new PIXI.Application({
       width: window.innerWidth,
@@ -26,9 +29,6 @@ export class Game {
       backgroundColor: 0x121721,
       resolution: window.devicePixelRatio || 1,
     });
-    this.rndr = new Renderer(this);
-    // this.em = EntityManager;
-    // this.working = false;
   }
 
   init() {
@@ -40,7 +40,8 @@ export class Game {
     }
     this.app.ticker.add(this.tick);
     
-    this.rndr.init();
+    this.worldRenderer.init();
+    this.entityRenderer.init();
     this.entityManager.init();
     this.worldManager.init();
   }
@@ -54,11 +55,12 @@ export class Game {
     this.entityManager.getBg().forEach((entity) => (<Living>entity).update());
     this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
     this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
-    
-    this.rndr.beforeRender();
-    this.rndr.render(RenderLayer.BG, this.entityManager.getBg());
-    this.rndr.render(RenderLayer.ANTS, this.entityManager.getAnts());
-    this.rndr.render(RenderLayer.ENEMIES, this.entityManager.getEnemies());
+
+    //render
+    this.worldRenderer.prepare();
+    this.worldRenderer.render();
+    this.entityRenderer.prepare();
+    this.entityRenderer.render();
   }
 }
 
