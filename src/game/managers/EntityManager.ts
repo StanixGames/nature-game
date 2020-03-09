@@ -4,6 +4,7 @@ import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
 import AntEntity from '../entities/AntEntity';
+import Living from '../interfaces/Living';
 import EnemyEntity from '../entities/EnemyEntity';
 import EatMutation from '../entities/mutations/EatMutation';
 import SizeMutation from '../entities/mutations/SizeMutation';
@@ -11,24 +12,23 @@ import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
 import { EntityType } from '../types';
 import EntityBuilder from '../builders/EntityBuilder';
-import QuadTree from '../../utils/QuadTree';
-import Rect from '../../utils/Rect';
-import Node from '../../utils/Node';
+import QuadArray from '../../utils/QuadArray';
 
 export default class EntityManager extends Manager {
   protected builder: EntityBuilder;
   protected bg: Map<string, Entity> = new Map();
   protected ants: Map<string, Entity> = new Map();
   protected enemies: Map<string, Entity> = new Map();
-  protected bgTree: QuadTree;
+  protected bgArray: QuadArray;
 
   constructor(game: Game) {
     super(game);
 
-    this.bgTree = new QuadTree(
-      new Rect(0, 0, window.innerWidth, window.innerHeight),
-      100,
-      20
+    this.bgArray = new QuadArray(
+      20,
+      10,
+      window.innerWidth,
+      window.innerHeight,
     );
     const bc = new BuilderCreator();
     this.builder = bc.createEntityBuilder();
@@ -45,7 +45,7 @@ export default class EntityManager extends Manager {
   createAnt(x: number = 0, y: number = 0): void {
     const id = uuidv1();
     const speed = 1;
-    const size = 2;
+    const size = 6;
     const ant = this.builder
       .create(EntityType.Ant)
       .setId(id)
@@ -84,7 +84,7 @@ export default class EntityManager extends Manager {
     const id = uuidv1();
     const x = window.innerWidth * Math.random();
     const y = window.innerHeight * Math.random();
-    const size = 4;
+    const size = 10;
     const food = this.builder
       .create(EntityType.Food)
       .setId(id)
@@ -92,7 +92,7 @@ export default class EntityManager extends Manager {
       .setSize(size)
       .build();
     this.bg.set(id, food);
-    this.bgTree.insert(food);
+    this.bgArray.add(food as Living);
   }
 
   getRandomAnt(): Entity | null {
@@ -113,6 +113,62 @@ export default class EntityManager extends Manager {
     return null;
   }
 
+  getFoodNearToOld(consumer: Living): Entity | null {
+    const { x, y } = consumer;
+    const cell = this.bgArray.retrive(x, y);
+    if (cell) {
+      let prevDistance = Infinity;
+      let targetChild: Entity | null = null;
+      cell.children.forEach((child: Living) => {
+        const distance = Math.sqrt(
+          Math.pow((child.x - x), 2) +
+          Math.pow((child.y - y), 2)
+        );
+        if (distance < prevDistance) {
+          prevDistance = distance;
+          targetChild = child;
+        }
+      });
+      return targetChild;
+    }
+    return null;
+  }
+
+  getFoodNearTo(consumer: Living): Entity | null {
+    const { x, y } = consumer;
+    const cellsToCheck = [
+      { x, y },
+      { x: x + this.bgArray.cellWidth, y },
+      { x: x - this.bgArray.cellWidth, y },
+      { x, y: y + this.bgArray.cellHeight },
+      { x, y: y - this.bgArray.cellHeight },
+      { x: x + this.bgArray.cellWidth, y: y + this.bgArray.cellHeight },
+      { x: x + this.bgArray.cellWidth, y: y - this.bgArray.cellHeight },
+      { x: x - this.bgArray.cellWidth, y: y - this.bgArray.cellHeight },
+      { x: x - this.bgArray.cellWidth, y: y + this.bgArray.cellHeight },
+    ]
+    const cells = this.bgArray.retriveAll(cellsToCheck);
+    if (cells.length > 0) {
+      let prevDistance = Infinity;
+      let targetChild: Entity | null = null;
+      
+      cells.forEach((cell) => {
+        cell.children.forEach((child: Living) => {
+          const distance = Math.sqrt(
+            Math.pow((child.x - x), 2) +
+            Math.pow((child.y - y), 2)
+          );
+          if (distance < prevDistance) {
+            prevDistance = distance;
+            targetChild = child;
+          }
+        });
+      });
+      return targetChild;
+    }
+    return null;
+  }
+
   getAnts(): Map<string, Entity> {
     return this.ants;
   }
@@ -125,8 +181,8 @@ export default class EntityManager extends Manager {
     return this.bg;
   }
 
-  getBgTree(): QuadTree {
-    return this.bgTree;
+  getBgArray(): QuadArray {
+    return this.bgArray;
   }
 
   killAnt(id: string): void {
@@ -136,14 +192,14 @@ export default class EntityManager extends Manager {
   }
 
   killFood(id: string): boolean {
-    const deleted = this.bg.delete(id);
-
-    if (deleted) {
-      const arr = Array.from(this.bg.values());
-      this.bgTree.clear();
-      this.bgTree.insert(arr);
+    const food = this.bg.get(id);
+    if (food) {
+      const deleted = this.bg.delete(id);
+      if (deleted) {
+        this.bgArray.remove(<Living>food);
+      }
+      return deleted;
     }
-
-    return deleted;
+    return false;
   }
 }

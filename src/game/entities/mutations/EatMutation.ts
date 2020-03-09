@@ -1,6 +1,7 @@
 import Game from '../../Game';
 import Entity from '../../interfaces/Entity';
 import Living from '../../interfaces/Living';
+import Moving from '../../interfaces/Moving';
 import Mutation from './Mutation';
 
 class EatMutation implements Mutation {
@@ -15,7 +16,7 @@ class EatMutation implements Mutation {
       if (entity.name === 'enemy') {
         targetEntity = Game.entityManager.getRandomAnt();
       } else if (entity.name === 'ant') {
-        targetEntity = Game.entityManager.getRandomFood();
+        targetEntity = Game.entityManager.getFoodNearTo(<Living>entity);
       }
 
       if (targetEntity) {
@@ -37,12 +38,15 @@ class EatMutation implements Mutation {
           } else if (entity.name === 'ant') {
             const killedFood = Game.entityManager.killFood(id);
             if (killedFood) {
-              if (Math.random() > 0.01) {
-                Game.entityManager.createAnt(
-                 (<Living>entity).x + 10,
-                 (<Living>entity).y + 10,
-                );
-              }
+              console.log(killedFood);
+              (<Living>entity).size += 1;
+              (<Moving>entity).speed -= 0.01;
+              // if (Math.random() > 0.01) {
+              //   Game.entityManager.createAnt(
+              //    (<Living>entity).x + 10,
+              //    (<Living>entity).y + 10,
+              //   );
+              // }
             }
           }
           
