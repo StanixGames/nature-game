@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Game } from '../Game';
+import { Game, WORLD_WIDTH, WORLD_HEIGHT } from '../Game';
 import Living from '../interfaces/Living';
 import Mutable from '../interfaces/Mutable';
 import EatMutation from '../entities/mutations/EatMutation';
@@ -11,6 +11,8 @@ export default class EntityRenderer extends Renderer {
   constructor(game: Game) {
     super(game);
     this.entityLayer = new PIXI.Graphics();
+    this.entityLayer.width = WORLD_WIDTH;
+    this.entityLayer.height = WORLD_HEIGHT;
   }
 
   init() {
@@ -19,6 +21,9 @@ export default class EntityRenderer extends Renderer {
 
   prepare(): void {
     this.entityLayer.clear();
+    const worldOffset = this.game.worldManager.getWorldOffset();
+    this.entityLayer.x = worldOffset[0];
+    this.entityLayer.y = worldOffset[1];
   }
   
   render(): void {

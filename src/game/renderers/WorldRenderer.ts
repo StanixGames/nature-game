@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Game } from '../Game';
+import { Game, WORLD_WIDTH, WORLD_HEIGHT } from '../Game';
 import Living from '../interfaces/Living';
 import Renderer from './Renderer';
 import QuadArray from '../../utils/QuadArray';
@@ -12,6 +12,8 @@ export default class WorldRenderer extends Renderer {
   constructor(game: Game) {
     super(game);
     this.worldLayer = new PIXI.Graphics();
+    this.worldLayer.width = WORLD_WIDTH;
+    this.worldLayer.height = WORLD_HEIGHT;
   }
 
   init() {
@@ -20,9 +22,13 @@ export default class WorldRenderer extends Renderer {
 
   prepare(): void {
     this.worldLayer.clear();
+    const worldOffset = this.game.worldManager.getWorldOffset();
+    this.worldLayer.x = worldOffset[0];
+    this.worldLayer.y = worldOffset[1];
   }
   
   render(): void {
+    // this.worldLayer.x = this.worldLayer.x + 1;
     // const foodArray: QuadArray = this.game.entityManager.getBgArray();
     // const tree: QuadTree = this.game.entityManager.getBgTree();
 
