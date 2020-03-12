@@ -39,7 +39,7 @@ class EatMutation implements Mutation {
             const killedFood = Game.entityManager.killFood(id);
             if (killedFood) {
               console.log(killedFood);
-              (<Living>entity).size += 1;
+              (<Living>entity).size += 0.01;
               (<Moving>entity).speed -= 0.01;
               // if (Math.random() > 0.01) {
               //   Game.entityManager.createAnt(
