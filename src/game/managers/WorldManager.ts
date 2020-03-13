@@ -3,14 +3,16 @@ import Manager from './Manager';
 
 export default class WorldManager extends Manager {
   private worldOffset: [number, number];
-  private dragging: boolean;
+  private prevWorldOffset: [number, number];
   private draggingPoint: [number, number];
+  private scaling: number;
 
   constructor(game: Game) {
     super(game);
     this.worldOffset = [0, 0];
+    this.prevWorldOffset = [0, 0];
     this.draggingPoint = [0, 0];
-    this.dragging = false;
+    this.scaling = 1;
   }
 
   init(): void {
@@ -43,17 +45,36 @@ export default class WorldManager extends Manager {
   }
 
   public setWorldOffset(xOffset: number, yOffset: number) {
-    this.worldOffset = [ xOffset - this.draggingPoint[0], yOffset ];
+    this.worldOffset = [
+      this.prevWorldOffset[0] + xOffset - this.draggingPoint[0],
+      this.prevWorldOffset[1] + yOffset - this.draggingPoint[1]
+    ];
   }
 
   public getWorldOffset(): [number, number] {
     return this.worldOffset;
   }
 
+  public getScaling(): number {
+    return this.scaling;
+  }
+
   public setDragging(status: boolean, x: number, y: number) {
-    this.dragging = status;
     if (status) {
-      this.draggingPoint = [ x, y ];
+      this.draggingPoint = [x, y];
+      this.prevWorldOffset = [
+        this.worldOffset[0],
+        this.worldOffset[1]
+      ];
+    }
+  }
+
+  public updateScaling(scale: number) {
+    this.scaling += scale;
+    if (this.scaling < 0.5) {
+      this.scaling = 0.5;
+    } else if (this.scaling > 3) {
+      this.scaling = 4;
     }
   }
 }

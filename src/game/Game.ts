@@ -9,8 +9,8 @@ import EntityRenderer from './renderers/EntityRenderer';
 const FPS = 60;
 const FT = 1000/FPS;
 
-export const WORLD_WIDTH = 5000;
-export const WORLD_HEIGHT = 5000;
+export const WORLD_WIDTH = 1000;
+export const WORLD_HEIGHT = 1000;
 
 export class Game {
   readonly worldManager: WorldManager;

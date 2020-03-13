@@ -23,8 +23,10 @@ export default class WorldRenderer extends Renderer {
   prepare(): void {
     this.worldLayer.clear();
     const worldOffset = this.game.worldManager.getWorldOffset();
+    const worldScaling = this.game.worldManager.getScaling();
     this.worldLayer.x = worldOffset[0];
     this.worldLayer.y = worldOffset[1];
+    this.worldLayer.scale.set(worldScaling, worldScaling);
   }
   
   render(): void {
@@ -35,7 +37,16 @@ export default class WorldRenderer extends Renderer {
     // this.renderQArray(foodArray);
     // this.renderNode(tree.root);
 
+    this.worldLayer.lineStyle(5, 0xffffff);
+    this.worldLayer.moveTo(0, 0);
+    this.worldLayer.lineTo(WORLD_WIDTH, 0);
+    this.worldLayer.lineTo(WORLD_WIDTH, WORLD_HEIGHT);
+    this.worldLayer.lineTo(0, WORLD_HEIGHT);
+    this.worldLayer.lineTo(0, 0);
+    this.worldLayer.closePath();
+
     const entities = this.game.entityManager.getBg();
+    this.worldLayer.lineStyle(0, 0xffffff);
     entities.forEach((entity) => {
       if (entity.name === 'food') {
         const { x, y, size } = <Living>entity;

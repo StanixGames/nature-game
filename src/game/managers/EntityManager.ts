@@ -1,5 +1,5 @@
 import { v1 as uuidv1 } from 'uuid';
-import { Game } from '../Game';
+import { Game, WORLD_HEIGHT, WORLD_WIDTH } from '../Game';
 import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
@@ -27,8 +27,8 @@ export default class EntityManager extends Manager {
     this.bgArray = new QuadArray(
       20,
       10,
-      window.innerWidth,
-      window.innerHeight,
+      WORLD_WIDTH,
+      WORLD_HEIGHT,
     );
     const bc = new BuilderCreator();
     this.builder = bc.createEntityBuilder();
@@ -63,8 +63,8 @@ export default class EntityManager extends Manager {
 
   createEnemy(): void {
     const id = uuidv1();
-    const x = window.innerWidth * Math.random();
-    const y = window.innerHeight * Math.random();
+    const x = WORLD_WIDTH * Math.random();
+    const y = WORLD_HEIGHT * Math.random();
     const speed = 1;
     const size = 6;
     const enemy = this.builder
@@ -82,9 +82,9 @@ export default class EntityManager extends Manager {
 
   createFood(): void {
     const id = uuidv1();
-    const x = window.innerWidth * Math.random();
-    const y = window.innerHeight * Math.random();
-    const size = 10;
+    const x = WORLD_WIDTH * Math.random();
+    const y = WORLD_HEIGHT * Math.random();
+    const size = Math.random() * 5 + 5;
     const food = this.builder
       .create(EntityType.Food)
       .setId(id)

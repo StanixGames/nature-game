@@ -24,6 +24,8 @@ export default class EntityRenderer extends Renderer {
     const worldOffset = this.game.worldManager.getWorldOffset();
     this.entityLayer.x = worldOffset[0];
     this.entityLayer.y = worldOffset[1];
+    const worldScaling = this.game.worldManager.getScaling();
+    this.entityLayer.scale.set(worldScaling, worldScaling);
   }
   
   render(): void {

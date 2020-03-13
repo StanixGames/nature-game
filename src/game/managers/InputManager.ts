@@ -13,10 +13,16 @@ export default class InputManager extends Manager {
     window.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('mouseup', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('wheel', this.handleMouseWheel);
   }
   
   destroy(): void {
     // todo clean up
+  }
+
+  handleMouseWheel = (event: WheelEvent): void => {
+    const { deltaY } = event;
+    this.game.worldManager.updateScaling(deltaY > 0 ? 0.01 : -0.01);
   }
 
   handleMouseUp = (event: MouseEvent): void => {
