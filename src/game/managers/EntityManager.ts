@@ -1,5 +1,6 @@
 import { v1 as uuidv1 } from 'uuid';
 import { Game, WORLD_HEIGHT, WORLD_WIDTH, WORLD_FOOD_MAX_CAPACITY, WORLD_ANTS_MAX_CAPACITY } from '../Game';
+import { entityInRange } from '../helpers';
 import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
@@ -11,6 +12,7 @@ import SplitMutation from '../entities/mutations/SplitMutation';
 import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
 import { EntityType } from '../types';
+import {Targets} from '../interfaces/Targets';
 import EntityBuilder from '../builders/EntityBuilder';
 import QuadArray from '../../utils/QuadArray';
 
@@ -44,7 +46,7 @@ export default class EntityManager extends Manager {
 
   createAnt(x: number = 0, y: number = 0, size: number = 6): void {
     const id = uuidv1();
-    const speed = 1;
+    const speed = 0.5;
     const mass = size * 2;
     const ant = this.builder
       .create(EntityType.Ant)
@@ -54,11 +56,11 @@ export default class EntityManager extends Manager {
       .setMass(mass)
       .setSpeed(speed)
       .setMoment(0.001)
-      .setMaxSpeed(1)
+      .setMaxSpeed(4)
       .addMutation(new EatMutation)
       .addMutation(new IdleMutation)
       .addMutation(new MoveMutation)
-      .addMutation(new SplitMutation)
+      // .addMutation(new SplitMutation)
       .build();
     this.addAnt(ant);
   }
@@ -118,6 +120,18 @@ export default class EntityManager extends Manager {
     return null;
   }
 
+  retriveObject(x: number, y: number, radius: number): Entity | null {
+    // todo: optimize this
+
+    const antsArray = Array.from(this.ants.values());
+    for (let i = 0; i < antsArray.length; i += 1) {
+      if (entityInRange(antsArray[i] as Living, x, y, radius)) {
+        return antsArray[i];
+      }
+    }
+    return null;
+  }
+
   getFoodNearToOld(consumer: Living): Entity | null {
     const { x, y } = consumer;
     const cell = this.bgArray.retrive(x, y);
@@ -172,6 +186,49 @@ export default class EntityManager extends Manager {
       return targetChild;
     }
     return null;
+  }
+
+  getFoodInRangeTo(consumer: Living, radius: number): Targets {
+    const targetEntities: Entity[] = [];
+    let targetChild: Entity | null = null;
+
+    const { x, y } = consumer;
+    const cellsToCheck = [
+      { x, y },
+      { x: x + this.bgArray.cellWidth, y },
+      { x: x - this.bgArray.cellWidth, y },
+      { x, y: y + this.bgArray.cellHeight },
+      { x, y: y - this.bgArray.cellHeight },
+      { x: x + this.bgArray.cellWidth, y: y + this.bgArray.cellHeight },
+      { x: x + this.bgArray.cellWidth, y: y - this.bgArray.cellHeight },
+      { x: x - this.bgArray.cellWidth, y: y - this.bgArray.cellHeight },
+      { x: x - this.bgArray.cellWidth, y: y + this.bgArray.cellHeight },
+    ];
+    const cells = this.bgArray.retriveAll(cellsToCheck);
+    if (cells.length > 0) {
+      let prevDistance = Infinity;
+
+      cells.forEach((cell) => {
+        cell.children.forEach((child: Living) => {
+          const distance = Math.sqrt(
+            Math.pow((child.x - x), 2) +
+            Math.pow((child.y - y), 2)
+          );
+          if (distance < consumer.size + radius) {
+            targetEntities.push(child);
+          }
+          if (distance < prevDistance) {
+            prevDistance = distance;
+            targetChild = child;
+          }
+        });
+      });
+    }
+
+    return {
+      entities: targetEntities,
+      nearest: targetChild,
+    };
   }
 
   getAnts(): Map<string, Entity> {

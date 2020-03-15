@@ -67,6 +67,14 @@ export default class WorldRenderer extends Renderer {
       }
     });
 
+    const selectedEntity = this.game.worldManager.getSelectedEntity();
+    if (selectedEntity) {
+      const { x, y, size } = <Living>selectedEntity;
+        this.worldLayer.beginFill(0x00FF00, 0.2);
+        this.worldLayer.drawCircle(x, y, size + 4);
+        this.worldLayer.closePath();
+    }
+
     // const elements = tree.retrieve({ x: 150, y: 101 });
     // elements.forEach((el) => {
     //   const { x, y } = el;

@@ -35,6 +35,7 @@ export default class InputManager extends Manager {
     const { button, pageX, pageY } = event;
     this.mouseDown[button] = true;
     this.game.worldManager.setDragging(true, pageX, pageY);
+    this.game.worldManager.setActiveObject(pageX, pageY);
   }
 
   handleMouseMove = (event: MouseEvent): void => {
