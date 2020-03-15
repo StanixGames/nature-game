@@ -10,17 +10,19 @@ class AntEntity implements Living, Mutable {
   hp: number = 100;
   x = 100;
   y = 100;
-  size = 1;
+  size: number;
+  mass: number;
   velX = 0;
   velY = 0;
   speed = 0;
   mutations: Map<string, Mutation>;
 
-  constructor(id: string, x: number, y: number, size: number, velX: number, velY: number, speed: number, mutations: Map<string, Mutation>) {
+  constructor(id: string, x: number, y: number, size: number, mass: number, velX: number, velY: number, speed: number, mutations: Map<string, Mutation>) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.size = size;
+    this.mass = mass;
     this.velX = velX;
     this.velY = velY;
     this.speed = speed;

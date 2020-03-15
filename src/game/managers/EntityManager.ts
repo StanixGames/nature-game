@@ -1,5 +1,5 @@
 import { v1 as uuidv1 } from 'uuid';
-import { Game, WORLD_HEIGHT, WORLD_WIDTH } from '../Game';
+import { Game, WORLD_HEIGHT, WORLD_WIDTH, WORLD_FOOD_MAX_CAPACITY, WORLD_ANTS_MAX_CAPACITY } from '../Game';
 import Manager from './Manager';
 import BuilderCreator from '../builders/BuilderCreator';
 import Entity from '../interfaces/Entity';
@@ -7,7 +7,7 @@ import AntEntity from '../entities/AntEntity';
 import Living from '../interfaces/Living';
 import EnemyEntity from '../entities/EnemyEntity';
 import EatMutation from '../entities/mutations/EatMutation';
-import SizeMutation from '../entities/mutations/SizeMutation';
+import SplitMutation from '../entities/mutations/SplitMutation';
 import MoveMutation from '../entities/mutations/MoveMutation';
 import IdleMutation from '../entities/mutations/IdleMutation';
 import { EntityType } from '../types';
@@ -42,23 +42,25 @@ export default class EntityManager extends Manager {
     // todo clean up
   }
 
-  createAnt(x: number = 0, y: number = 0): void {
+  createAnt(x: number = 0, y: number = 0, size: number = 6): void {
     const id = uuidv1();
     const speed = 1;
-    const size = 6;
+    const mass = size * 2;
     const ant = this.builder
       .create(EntityType.Ant)
       .setId(id)
       .setPosition(x, y)
       .setSize(size)
+      .setMass(mass)
       .setSpeed(speed)
       .setMoment(0.001)
       .setMaxSpeed(1)
       .addMutation(new EatMutation)
       .addMutation(new IdleMutation)
       .addMutation(new MoveMutation)
+      .addMutation(new SplitMutation)
       .build();
-    this.ants.set(id, ant);
+    this.addAnt(ant);
   }
 
   createEnemy(): void {
@@ -67,11 +69,13 @@ export default class EntityManager extends Manager {
     const y = WORLD_HEIGHT * Math.random();
     const speed = 1;
     const size = 6;
+    const mass = size * 2;
     const enemy = this.builder
       .create(EntityType.Enemy)
       .setId(id)
       .setPosition(x, y)
       .setSize(size)
+      .setMass(mass)
       .setSpeed(speed)
       .addMutation(new EatMutation)
       .addMutation(new IdleMutation)
@@ -85,14 +89,15 @@ export default class EntityManager extends Manager {
     const x = WORLD_WIDTH * Math.random();
     const y = WORLD_HEIGHT * Math.random();
     const size = Math.random() * 5 + 5;
+    const mass = size * 2;
     const food = this.builder
       .create(EntityType.Food)
       .setId(id)
       .setPosition(x, y)
       .setSize(size)
+      .setMass(mass)
       .build();
-    this.bg.set(id, food);
-    this.bgArray.add(food as Living);
+    this.addFood(food);
   }
 
   getRandomAnt(): Entity | null {
@@ -201,5 +206,22 @@ export default class EntityManager extends Manager {
       return deleted;
     }
     return false;
+  }
+  
+  addFood(food: Entity): void {
+    if (this.bg.size < WORLD_FOOD_MAX_CAPACITY) {
+      this.bg.set(food.id, food);
+      this.bgArray.add(food as Living);
+    } else {
+      console.log(`Cannot create more than ${WORLD_FOOD_MAX_CAPACITY} food entities!`)
+    }
+  }
+
+  addAnt(ant: Entity): void {
+    if (this.ants.size < WORLD_ANTS_MAX_CAPACITY) {
+      this.ants.set(ant.id, ant);
+    } else {
+      console.log(`Cannot create more than ${WORLD_ANTS_MAX_CAPACITY} ant entities!`)
+    }
   }
 }

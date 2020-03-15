@@ -7,13 +7,15 @@ class FoodEntity implements Living {
   hp: number = 100;
   x = 200;
   y = 200;
-  size = 5;
+  size: number;
+  mass: number;
 
-  constructor(id: string, x: number, y: number, size: number) {
+  constructor(id: string, x: number, y: number, size: number, mass: number) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.size = size;
+    this.mass = mass;
   }
 
   update(): void {

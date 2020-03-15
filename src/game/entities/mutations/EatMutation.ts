@@ -25,7 +25,7 @@ class EatMutation implements Mutation {
       }
     } else {
       if (this.targetEntity) {
-        const { id, x, y, size } = <Living>this.targetEntity;
+        const { id, x, y, size, mass } = <Living>this.targetEntity;
         const distance = Math.sqrt(
           Math.pow(((<Living>entity).x - x), 2) +
           Math.pow(((<Living>entity).y - y), 2)
@@ -38,9 +38,9 @@ class EatMutation implements Mutation {
           } else if (entity.name === 'ant') {
             const killedFood = Game.entityManager.killFood(id);
             if (killedFood) {
-              console.log(killedFood);
-              (<Living>entity).size += 0.01;
-              (<Moving>entity).speed -= 0.01;
+              (<Living>entity).size += mass / 20;
+              (<Living>entity).mass = (<Living>entity).size * 2;
+              // (<Moving>entity).speed -= ;
               // if (Math.random() > 0.01) {
               //   Game.entityManager.createAnt(
               //    (<Living>entity).x + 10,

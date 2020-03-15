@@ -16,6 +16,7 @@ class EntityBuilder extends Builder<Entity> {
   position: Vector = { x: 0, y: 0 };
   velocity: Vector = { x: 0, y: 0 };
   size: number = 1;
+  mass: number = 2;
   mutations: Map<string, Mutation> = new Map();
 
   constructor() {
@@ -67,6 +68,11 @@ class EntityBuilder extends Builder<Entity> {
     return this;
   }
 
+  setMass(mass: number) {
+    this.mass = mass;
+    return this;
+  }
+
   addMutation(mutation: Mutation) {
     this.mutations.set(mutation.name, mutation);
     return this;
@@ -80,6 +86,7 @@ class EntityBuilder extends Builder<Entity> {
           this.position.x,
           this.position.y,
           this.size,
+          this.mass,
           this.velocity.x,
           this.velocity.y,
           this.speed,
@@ -91,6 +98,7 @@ class EntityBuilder extends Builder<Entity> {
           this.position.x,
           this.position.y,
           this.size,
+          this.mass,
           this.velocity.x,
           this.velocity.y,
           this.moment,
@@ -104,6 +112,7 @@ class EntityBuilder extends Builder<Entity> {
           this.position.x,
           this.position.y,
           this.size,
+          this.mass,
         );
       default:
         throw new Error('Invalid entity type!');
