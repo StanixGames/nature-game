@@ -11,6 +11,9 @@ const FT = 1000/FPS;
 
 export const WORLD_WIDTH = 1000;
 export const WORLD_HEIGHT = 1000;
+export const WORLD_FOOD_MAX_CAPACITY = 1000;
+export const WORLD_ANTS_MAX_CAPACITY = 500;
+// export const WORLD__MAX_CAPACITY = 500;
 
 export class Game {
   readonly worldManager: WorldManager;
