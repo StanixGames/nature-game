@@ -5,6 +5,7 @@ import WorldManager from './managers/WorldManager';
 import InputManager from './managers/InputManager';
 import WorldRenderer from './renderers/WorldRenderer';
 import EntityRenderer from './renderers/EntityRenderer';
+import DebugRenderer from './renderers/DebugRenderer';
 
 const FPS = 60;
 const FT = 1000/FPS;
@@ -21,6 +22,7 @@ export class Game {
   readonly inputManager: InputManager;
   readonly worldRenderer: WorldRenderer;
   readonly entityRenderer: EntityRenderer;
+  readonly debugRenderer: DebugRenderer;
   readonly value: number;
   readonly app: PIXI.Application;
 
@@ -31,6 +33,7 @@ export class Game {
     this.inputManager = new InputManager(this);
     this.worldRenderer = new WorldRenderer(this);
     this.entityRenderer = new EntityRenderer(this);
+    this.debugRenderer = new DebugRenderer(this);
 
     this.app = new PIXI.Application({
       resizeTo: window,
@@ -51,11 +54,13 @@ export class Game {
     }
     this.app.ticker.add(this.tick);
     
-    this.worldRenderer.init();
-    this.entityRenderer.init();
     this.entityManager.init();
     this.worldManager.init();
     this.inputManager.init();
+
+    this.worldRenderer.init();
+    this.entityRenderer.init();
+    this.debugRenderer.init();
   }
 
   start() {
@@ -73,6 +78,8 @@ export class Game {
     this.worldRenderer.render();
     this.entityRenderer.prepare();
     this.entityRenderer.render();
+    this.debugRenderer.prepare();
+    this.debugRenderer.render();
   }
 }
 
