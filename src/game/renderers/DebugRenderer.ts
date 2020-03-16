@@ -20,6 +20,10 @@ export default class DebugRenderer extends Renderer {
     this.game.app.stage.addChild(this.debugLayer);
   }
 
+  destroy() {
+    this.game.app.stage.removeChild(this.debugLayer);
+  }
+
   prepare(): void {
     this.debugLayer.clear();
     const worldOffset = this.game.worldManager.getWorldOffset();

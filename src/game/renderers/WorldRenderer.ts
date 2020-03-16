@@ -20,6 +20,10 @@ export default class WorldRenderer extends Renderer {
     this.game.app.stage.addChild(this.worldLayer);
   }
 
+  destroy() {
+    this.game.app.stage.removeChild(this.worldLayer);
+  }
+
   prepare(): void {
     this.worldLayer.clear();
     const worldOffset = this.game.worldManager.getWorldOffset();
@@ -67,7 +71,7 @@ export default class WorldRenderer extends Renderer {
       }
     });
 
-    const selectedEntity = this.game.worldManager.getSelectedEntity();
+    const selectedEntity = this.game.guiManager.getSelectedEntity();
     if (selectedEntity) {
       const { x, y, size } = <Living>selectedEntity;
         this.worldLayer.beginFill(0x00FF00, 0.2);

@@ -10,4 +10,5 @@ export default abstract class Renderer {
   abstract init(): void // first init
   abstract prepare(): void;
   abstract render(): void;
+  abstract destroy(): void;
 }

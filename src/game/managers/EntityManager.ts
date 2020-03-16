@@ -41,7 +41,9 @@ export default class EntityManager extends Manager {
   }
   
   destroy(): void {
-    // todo clean up
+    this.bg.clear();
+    this.ants.clear();
+    this.enemies.clear();
   }
 
   createAnt(x: number = 0, y: number = 0, size: number = 6): void {

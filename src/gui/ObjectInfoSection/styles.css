@@ -1,0 +1,11 @@
+.ois-wrapper {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 300px;
+  background-color: darkslategrey;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px;
+}

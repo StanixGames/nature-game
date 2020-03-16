@@ -17,7 +17,10 @@ export default class InputManager extends Manager {
   }
   
   destroy(): void {
-    // todo clean up
+    window.removeEventListener('mousedown', this.handleMouseDown);
+    window.removeEventListener('mouseup', this.handleMouseUp);
+    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('wheel', this.handleMouseWheel);
   }
 
   handleMouseWheel = (event: WheelEvent): void => {

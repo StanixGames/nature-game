@@ -3,6 +3,7 @@ import Living from './interfaces/Living';
 import EntityManager from './managers/EntityManager';
 import WorldManager from './managers/WorldManager';
 import InputManager from './managers/InputManager';
+import GUIManager from './managers/GUIManager';
 import WorldRenderer from './renderers/WorldRenderer';
 import EntityRenderer from './renderers/EntityRenderer';
 import DebugRenderer from './renderers/DebugRenderer';
@@ -20,6 +21,7 @@ export class Game {
   readonly worldManager: WorldManager;
   readonly entityManager: EntityManager;
   readonly inputManager: InputManager;
+  readonly guiManager: GUIManager;
   readonly worldRenderer: WorldRenderer;
   readonly entityRenderer: EntityRenderer;
   readonly debugRenderer: DebugRenderer;
@@ -31,6 +33,7 @@ export class Game {
     this.worldManager = new WorldManager(this);
     this.entityManager = new EntityManager(this);
     this.inputManager = new InputManager(this);
+    this.guiManager = new GUIManager(this);
     this.worldRenderer = new WorldRenderer(this);
     this.entityRenderer = new EntityRenderer(this);
     this.debugRenderer = new DebugRenderer(this);
@@ -57,14 +60,23 @@ export class Game {
     this.entityManager.init();
     this.worldManager.init();
     this.inputManager.init();
+    this.guiManager.init();
 
     this.worldRenderer.init();
     this.entityRenderer.init();
     this.debugRenderer.init();
   }
 
-  start() {
-    // todo
+  destroy() {
+    this.entityManager.destroy();
+    this.worldManager.destroy();
+    this.inputManager.destroy();
+    this.guiManager.destroy();
+
+    this.worldRenderer.destroy();
+    this.entityRenderer.destroy();
+    this.debugRenderer.destroy();
+    this.app.destroy();
   }
 
   tick = () => {
@@ -72,7 +84,8 @@ export class Game {
     this.entityManager.getBg().forEach((entity) => (<Living>entity).update());
     this.entityManager.getAnts().forEach((entity) => (<Living>entity).update());
     this.entityManager.getEnemies().forEach((entity) => (<Living>entity).update());
-
+    this.guiManager.update();
+    
     //render
     this.worldRenderer.prepare();
     this.worldRenderer.render();

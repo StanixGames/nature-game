@@ -19,6 +19,10 @@ export default class EntityRenderer extends Renderer {
     this.game.app.stage.addChild(this.entityLayer);
   }
 
+  destroy() {
+    this.game.app.stage.removeChild(this.entityLayer);
+  }
+
   prepare(): void {
     this.entityLayer.clear();
     const worldOffset = this.game.worldManager.getWorldOffset();

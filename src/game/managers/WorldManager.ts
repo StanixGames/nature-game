@@ -7,7 +7,6 @@ export default class WorldManager extends Manager {
   private prevWorldOffset: [number, number];
   private draggingPoint: [number, number];
   private scaling: number;
-  private selectedEntity: Entity | null;
 
   constructor(game: Game) {
     super(game);
@@ -15,20 +14,14 @@ export default class WorldManager extends Manager {
     this.prevWorldOffset = [0, 0];
     this.draggingPoint = [0, 0];
     this.scaling = 1;
-    this.selectedEntity = null;
   }
 
   init(): void {
-    for (let i = 0; i< 1000; i++) {
+    for (let i = 0; i< 1; i++) {
       this.game.entityManager.createAnt(
         WORLD_WIDTH / 2,
         WORLD_HEIGHT / 2,
       );
-    //   this.game.entityManager.createAnt(
-    //     window.innerWidth * Math.random(),
-    //     window.innerHeight * Math.random(),
-    //   );
-    //   // this.game.entityManager.createEnemy();
     }
     
     setInterval(() => {
@@ -82,10 +75,7 @@ export default class WorldManager extends Manager {
   }
 
   public setActiveObject(x: number, y: number): void {
-    this.selectedEntity = this.game.entityManager.retriveObject(x, y, 0);
-  }
-
-  public getSelectedEntity(): Entity | null {
-    return this.selectedEntity;
+    const selectedEntity = this.game.entityManager.retriveObject(x, y, 0);
+    this.game.guiManager.setSelectedEntity(selectedEntity);
   }
 }
